@@ -24,7 +24,7 @@ def gallery(request, **kwargs):
     show_year = kwargs.get('gfyear', latest_year)
     show_year = int(show_year) if show_year else None
 
-    albums = allalbums.filter(gfyear__exact=show_year).prefetch_related('basemedia').annotate(count=Count('basemedia'))
+    albums = allalbums.all().prefetch_related('basemedia').annotate(count=Count('basemedia'))
 
     firstImages = BaseMedia.objects.filter(album__in=albums, isCoverFile=True).prefetch_related('album').select_subclasses()
 
@@ -38,9 +38,11 @@ def gallery(request, **kwargs):
                 break
         albumSets.append((a, i))
 
+    group_by_years = [[y, [a for a in albumSets if a[0].gfyear == y]] for y in years]
+
     context = {'years': years,
                'show_year': show_year,
-               'albumSets': albumSets,
+               'group_by_years': group_by_years,
     }
 
     return render(request, 'gallery.html', context)

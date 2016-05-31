@@ -6,17 +6,16 @@
 {% block content %}
 <div class="row">
   <div class="panel-group" id="accordition" role="tablist" aria-multiselectable="true">
-  {% for year in years %}
+  {% for year, albumSets in group_by_years %}
     <div class="panel panel-default">
       <div class="panel-heading" role="tab" id="heading{{year}}">
         <h4 class="panel-title">
-          <a href="{{year}}">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordition" href="#collapse{{year}}" aria-expanded="false" aria-controls="collapse{{year}}">
             {{year|gfyearPPslash}}
           </a>
         </h4>
       </div> <!-- panel-heading -->
       <div id="collapse{{year}}" class="panel-collapse collapse{% if year == show_year %} in{% endif %}" role="tabpanel" aria-labelledby="heading{{year}}">
-        {% if year == show_year %}
         <div class="panel-body">
           <div class="row">
             <div class="col-xs-12">
@@ -53,7 +52,6 @@
             </div>
           </div> <!-- row-->
         </div> <!-- panel-body -->
-        {% endif %}
       </div> <!-- collapse{{year}} -->
     </div> <!-- panel panel-default  -->
   {% empty %}
